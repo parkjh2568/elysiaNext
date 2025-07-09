@@ -3,9 +3,10 @@
 import { useState, useEffect } from 'react'
 import { Plus, RefreshCw } from 'lucide-react'
 import { User } from '@/backend/v1/user/userService'
-import UserTable from './UserTable'
-import UserModal from './UserModal'
-import { getAllUsers, createUser, updateUser, deleteUser } from './userColler'
+import UserTable from '@/app/admin/user/(components)/UserTable'
+import UserModal from '@/app/admin/user/(components)/UserModal'
+import { getAllUsers, createUser, updateUser, deleteUser } from '@/app/admin/user/(components)/UserService'
+import AuthGuard from '@/app/(auth)/(components)/AuthGuard'
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([])
@@ -90,12 +91,13 @@ export default function UsersPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">유저 관리</h1>
-          <p className="text-gray-600 mt-2">시스템 사용자를 관리할 수 있습니다.</p>
-        </div>
+    <AuthGuard>
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">유저 관리</h1>
+            <p className="text-gray-600 mt-2">시스템 사용자를 관리할 수 있습니다.</p>
+          </div>
         <div className="flex space-x-3">
           <button
             onClick={fetchUsers}
@@ -149,6 +151,7 @@ export default function UsersPage() {
         onSave={handleSaveUser}
         title={selectedUser ? '유저 수정' : '새 유저 추가'}
       />
-    </div>
+      </div>
+    </AuthGuard>
   )
 } 

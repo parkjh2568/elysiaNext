@@ -1,65 +1,34 @@
-import Image from "next/image";
+'use client';
+
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/app/(auth)/(components)/AuthProvider';
 
 export default function Home() {
+  const router = useRouter();
+  const { isLoggedIn, isLoading } = useAuth();
+
+  useEffect(() => {
+    // 로딩이 완료된 후에만 리다이렉트 실행
+    if (!isLoading) {
+      if (isLoggedIn) {
+        // 로그인된 상태면 관리자 대시보드로 리다이렉트
+        router.push('/admin/dashboard');
+      } else {
+        // 로그인되지 않은 상태면 로그인 페이지로 리다이렉트
+        router.push('/admin/login');
+      }
+    }
+  }, [isLoggedIn, isLoading, router]);
+
+  // 리다이렉트 중 로딩 표시
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">대시보드</h1>
-        <p className="text-gray-600 mt-2">관리자 대시보드에 오신 것을 환영합니다.</p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">전체 사용자</h3>
-          <p className="text-3xl font-bold text-blue-600">1,234</p>
-        </div>
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">활성 사용자</h3>
-          <p className="text-3xl font-bold text-green-600">987</p>
-        </div>
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">오늘 가입</h3>
-          <p className="text-3xl font-bold text-purple-600">23</p>
-        </div>
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">월간 성장률</h3>
-          <p className="text-3xl font-bold text-orange-600">12.5%</p>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">최근 활동</h3>
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">새로운 사용자가 가입했습니다</span>
-              <span className="text-xs text-gray-400">2분 전</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">시스템 업데이트가 완료되었습니다</span>
-              <span className="text-xs text-gray-400">1시간 전</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">백업이 성공적으로 완료되었습니다</span>
-              <span className="text-xs text-gray-400">3시간 전</span>
-            </div>
-          </div>
-        </div>
-        
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">빠른 액션</h3>
-          <div className="space-y-3">
-            <button className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
-              새 사용자 추가
-            </button>
-            <button className="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors">
-              데이터 내보내기
-            </button>
-            <button className="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors">
-              시스템 설정
-            </button>
-          </div>
-        </div>
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+        <p className="mt-4 text-gray-600">
+          {isLoading ? '인증 상태를 확인하는 중입니다...' : '페이지를 이동 중입니다...'}
+        </p>
       </div>
     </div>
   );

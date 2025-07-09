@@ -1,4 +1,4 @@
-import { app } from '@/backend/v1/elysia'
+import { app } from '@/backend/elysia'
 
 export const GET = app.handle
 export const POST = app.handle

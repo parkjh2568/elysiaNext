@@ -1,12 +1,15 @@
 import { Elysia } from "elysia";
 import { node } from "@elysiajs/node";
-import { usersRouter } from "./user/userRouter";
+import { usersRouter } from "./v1/user/userRouter";
+import { authRouter } from "./v1/auth/authRouter";
 
-const v1Router = new Elysia({ prefix: "/v1" })
-  .use(usersRouter);
+const v1Router = new Elysia({ prefix: "/api/v1" })
+.use(usersRouter)
+.use(authRouter);
 
-export const app = new Elysia({ prefix: "/api", adapter: node() })
+export const app = new Elysia({ adapter: node() })
   .get("/health", () => {
+    console.log("health check");
     return {
       success: true,
       message: "API 서버가 정상적으로 작동 중입니다.",
