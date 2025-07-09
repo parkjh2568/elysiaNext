@@ -20,7 +20,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     },
     {
       name: '유저 관리',
-      href: '/user',
+      href: '/admin/user',
       icon: Users,
     },
     {

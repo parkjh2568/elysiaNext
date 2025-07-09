@@ -1,6 +1,6 @@
 'use client'
 
-import { User } from '@/backend/user/userService'
+import { User } from '@/backend/v1/user/userService'
 import { Edit, Trash2 } from 'lucide-react'
 
 interface UserTableProps {

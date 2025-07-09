@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react'
 import { Plus, RefreshCw } from 'lucide-react'
 import { User } from '@/backend/v1/user/userService'
-import UserTable from '@/app/user/UserTable'
-import UserModal from '@/app/user/UserModal'
-import { getAllUsers, createUser, updateUser, deleteUser } from '@/app/user/userColler'
+import UserTable from './UserTable'
+import UserModal from './UserModal'
+import { getAllUsers, createUser, updateUser, deleteUser } from './userColler'
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([])
