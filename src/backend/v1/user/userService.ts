@@ -1,23 +1,4 @@
-export interface User {
-  id: string
-  name: string
-  email: string
-  role: 'admin' | 'user'
-  createdAt: Date
-  updatedAt: Date
-}
-
-export interface CreateUserRequest {
-  name: string
-  email: string
-  role: 'admin' | 'user'
-}
-
-export interface UpdateUserRequest {
-  name?: string
-  email?: string
-  role?: 'admin' | 'user'
-}
+import type { User, CreateUserRequest, UpdateUserRequest } from '@/types/user'
 
 // 임시 메모리 저장소 (실제 프로덕션에서는 데이터베이스 사용)
 let users: User[] = [

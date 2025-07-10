@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react'
 import { Plus, RefreshCw } from 'lucide-react'
-import { User } from '@/backend/v1/user/userService'
-import UserTable from '@/app/admin/user/(components)/UserTable'
-import UserModal from '@/app/admin/user/(components)/UserModal'
-import { getAllUsers, createUser, updateUser, deleteUser } from '@/app/admin/user/(components)/UserService'
-import AuthGuard from '@/app/(auth)/(components)/AuthGuard'
+import type { User } from '@/types/user'
+import { UserTable } from './_components/UserTable'
+import { UserModal } from './_components/UserModal'
+import { getAllUsers, createUser, updateUser, deleteUser } from '@/lib/api/users'
+import { AuthGuard } from '@/components/features/auth/AuthGuard'
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([])

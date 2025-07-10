@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/app/(auth)/(components)/AuthProvider';
-import { login } from '@/app/admin/login/(components)/LoginService';
+import { useAuth } from '@/components/features/auth/AuthProvider';
+import { login } from '@/app/admin/login/_lib/auth';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');

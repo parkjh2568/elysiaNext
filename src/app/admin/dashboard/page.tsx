@@ -1,7 +1,7 @@
 'use client';
 
-import AuthGuard from '@/app/(auth)/(components)/AuthGuard';
-import { useAuth } from '@/app/(auth)/(components)/AuthProvider';
+import { AuthGuard } from '@/components/features/auth/AuthGuard';
+import { useAuth } from '@/components/features/auth/AuthProvider';
 
 export default function DashboardPage() {
   const { user, logout } = useAuth();

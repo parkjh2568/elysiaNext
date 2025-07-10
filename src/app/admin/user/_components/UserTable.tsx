@@ -1,6 +1,6 @@
 'use client'
 
-import { User } from '@/backend/v1/user/userService'
+import type { User } from '@/types/user'
 import { Edit, Trash2 } from 'lucide-react'
 
 interface UserTableProps {
@@ -9,7 +9,7 @@ interface UserTableProps {
   onDelete: (id: string) => void
 }
 
-export default function UserTable({ users, onEdit, onDelete }: UserTableProps) {
+export function UserTable({ users, onEdit, onDelete }: UserTableProps) {
   const formatDate = (date: Date) => {
     return new Date(date).toLocaleDateString('ko-KR')
   }

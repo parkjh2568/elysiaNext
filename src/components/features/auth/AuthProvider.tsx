@@ -1,16 +1,9 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { User, getCurrentUser, isAuthenticated, logout } from '@/app/admin/login/(components)/LoginService';
-
-interface AuthContextType {
-  user: User | null;
-  isLoading: boolean;
-  isLoggedIn: boolean;
-  login: (user: User) => void;
-  logout: () => void;
-  checkAuth: () => boolean;
-}
+import { getCurrentUser, isAuthenticated, logout } from '@/lib/utils/storage';
+import type { User } from '@/types/user';
+import type { AuthContextType } from '@/types/auth';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 

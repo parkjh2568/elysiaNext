@@ -9,7 +9,7 @@ interface SidebarProps {
   onClose: () => void
 }
 
-export default function Sidebar({ isOpen, onClose }: SidebarProps) {
+export function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname()
 
   const menuItems = [

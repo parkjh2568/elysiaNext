@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { X } from 'lucide-react'
-import { User, CreateUserRequest, UpdateUserRequest } from '@/backend/v1/user/userService'
+import type { User, CreateUserRequest, UpdateUserRequest } from '@/types/user'
 
 interface UserModalProps {
   isOpen: boolean
@@ -12,7 +12,7 @@ interface UserModalProps {
   title: string
 }
 
-export default function UserModal({ isOpen, onClose, user, onSave, title }: UserModalProps) {
+export function UserModal({ isOpen, onClose, user, onSave, title }: UserModalProps) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',

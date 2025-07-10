@@ -2,14 +2,14 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/app/(auth)/(components)/AuthProvider';
+import { useAuth } from './AuthProvider';
 
 interface AuthGuardProps {
   children: React.ReactNode;
   fallback?: React.ReactNode;
 }
 
-export default function AuthGuard({ children, fallback }: AuthGuardProps) {
+export function AuthGuard({ children, fallback }: AuthGuardProps) {
   const { isLoggedIn, isLoading } = useAuth();
   const router = useRouter();
 

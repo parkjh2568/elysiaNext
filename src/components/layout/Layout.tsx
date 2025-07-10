@@ -2,15 +2,15 @@
 
 import { useState } from 'react'
 import { usePathname } from 'next/navigation'
-import Header from './Header'
-import Sidebar from './Sidebar'
-import Footer from './Footer'
+import { Header } from './Header'
+import { Sidebar } from './Sidebar'
+import { Footer } from './Footer'
 
 interface LayoutProps {
   children: React.ReactNode
 }
 
-export default function Layout({ children }: LayoutProps) {
+export function Layout({ children }: LayoutProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const pathname = usePathname()
 
