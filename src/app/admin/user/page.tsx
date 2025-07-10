@@ -5,7 +5,7 @@ import { Plus, RefreshCw } from 'lucide-react'
 import type { User } from '@/types/user'
 import { UserTable } from './_components/UserTable'
 import { UserModal } from './_components/UserModal'
-import { getAllUsers, createUser, updateUser, deleteUser } from '@/lib/api/users'
+import { getAllUsers, createUser, updateUser, deleteUser } from '@/app/admin/user/_lib/users'
 import { AuthGuard } from '@/components/features/auth/AuthGuard'
 
 export default function UsersPage() {

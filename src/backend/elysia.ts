@@ -1,11 +1,37 @@
 import { Elysia } from "elysia";
 import { node } from "@elysiajs/node";
+import { jwt } from "@elysiajs/jwt";
+import { bearer } from "@elysiajs/bearer";
 import { usersRouter } from "./v1/user/userRouter";
 import { authRouter } from "./v1/auth/authRouter";
 
+// JWT 설정
+const jwtConfig = {
+  name: 'jwt',
+  secret: process.env.JWT_SECRET || 'your-secret-key',
+  exp: '15m' // 15분
+};
+
+const refreshJwtConfig = {
+  name: 'refreshJwt',
+  secret: process.env.JWT_REFRESH_SECRET || 'your-refresh-secret-key',
+  exp: '7d' // 7일
+};
+
 const v1Router = new Elysia({ prefix: "/api/v1" })
-.use(usersRouter)
-.use(authRouter);
+.use(bearer())
+.use(jwt(jwtConfig))
+.use(jwt(refreshJwtConfig))
+.use(authRouter)
+.guard({
+  beforeHandle: ({ bearer, jwt, refreshJwt }) => {
+    console.log('bearer', bearer);
+    console.log('jwt', jwt);
+    console.log('refreshJwt', refreshJwt);
+  }
+})
+.use(usersRouter);
+
 
 export const app = new Elysia({ adapter: node() })
   .get("/health", () => {

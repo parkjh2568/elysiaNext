@@ -1,12 +1,33 @@
 import { Elysia, t } from 'elysia';
+import { jwt } from '@elysiajs/jwt';
 import { authService } from './authService';
 
+// JWT 설정
+const jwtConfig = {
+  name: 'jwt',
+  secret: process.env.JWT_SECRET || 'your-secret-key',
+  exp: '15m' // 15분
+};
+
+const refreshJwtConfig = {
+  name: 'refreshJwt',
+  secret: process.env.JWT_REFRESH_SECRET || 'your-refresh-secret-key',
+  exp: '7d' // 7일
+};
+
 export const authRouter = new Elysia({ prefix: '/auth' })
-  .post('/login', async ({ body, set }) => {
+  .use(jwt(jwtConfig))
+  .use(jwt(refreshJwtConfig))
+  .post('/login', async ({ body, set, jwt, refreshJwt }) => {
     try {
       const { email, password } = body;
       
-      const result = await authService.login(email, password);
+      const jwtInstances = {
+        accessJwt: jwt,
+        refreshJwt: refreshJwt
+      };
+      
+      const result = await authService.login(email, password, jwtInstances);
       
       if (!result.success) {
         set.status = 401;
@@ -18,7 +39,7 @@ export const authRouter = new Elysia({ prefix: '/auth' })
       
       return {
         success: true,
-        token: result.token,
+        tokens: result.tokens,
         user: result.user
       };
     } catch (error) {
@@ -36,7 +57,7 @@ export const authRouter = new Elysia({ prefix: '/auth' })
     })
   })
   
-  .post('/validate', async ({ headers, set }) => {
+  .post('/validate', async ({ headers, set, jwt, refreshJwt }) => {
     try {
       const authHeader = headers.authorization;
       
@@ -46,7 +67,12 @@ export const authRouter = new Elysia({ prefix: '/auth' })
       }
       
       const token = authHeader.substring(7);
-      const isValid = await authService.validateToken(token);
+      const jwtInstances = {
+        accessJwt: jwt,
+        refreshJwt: refreshJwt
+      };
+      
+      const isValid = await authService.validateAccessToken(token, jwtInstances);
       
       if (!isValid) {
         set.status = 401;
@@ -64,7 +90,7 @@ export const authRouter = new Elysia({ prefix: '/auth' })
     }
   })
   
-  .get('/user', async ({ headers, set }) => {
+  .get('/me', async ({ headers, set, jwt, refreshJwt }) => {
     try {
       const authHeader = headers.authorization;
       
@@ -74,7 +100,12 @@ export const authRouter = new Elysia({ prefix: '/auth' })
       }
       
       const token = authHeader.substring(7);
-      const user = await authService.getUserFromToken(token);
+      const jwtInstances = {
+        accessJwt: jwt,
+        refreshJwt: refreshJwt
+      };
+      
+      const user = await authService.getUserFromAccessToken(token, jwtInstances);
       
       if (!user) {
         set.status = 401;
@@ -90,4 +121,80 @@ export const authRouter = new Elysia({ prefix: '/auth' })
         message: '사용자 정보 조회 중 오류가 발생했습니다.'
       };
     }
+  })
+
+  .post('/refresh', async ({ body, set, jwt, refreshJwt }) => {
+    try {
+      const { refreshToken } = body;
+      
+      if (!refreshToken) {
+        set.status = 400;
+        return { success: false, message: 'Refresh token이 필요합니다.' };
+      }
+      
+      const jwtInstances = {
+        accessJwt: jwt,
+        refreshJwt: refreshJwt
+      };
+      
+      const result = await authService.refreshTokens(refreshToken, jwtInstances);
+      
+      if (!result.success) {
+        set.status = 401;
+        return {
+          success: false,
+          message: result.message || 'Token 갱신에 실패했습니다.'
+        };
+      }
+      
+      return {
+        success: true,
+        tokens: result.tokens
+      };
+    } catch (error) {
+      console.error('Refresh token error:', error);
+      set.status = 500;
+      return {
+        success: false,
+        message: 'Token 갱신 중 오류가 발생했습니다.'
+      };
+    }
+  }, {
+    body: t.Object({
+      refreshToken: t.String()
+    })
+  })
+
+  .post('/logout', async ({ body, set, jwt, refreshJwt }) => {
+    try {
+      const { refreshToken } = body;
+      
+      if (!refreshToken) {
+        set.status = 400;
+        return { success: false, message: 'Refresh token이 필요합니다.' };
+      }
+      
+      const jwtInstances = {
+        accessJwt: jwt,
+        refreshJwt: refreshJwt
+      };
+      
+      const result = await authService.logout(refreshToken, jwtInstances);
+      
+      return {
+        success: result.success,
+        message: result.message
+      };
+    } catch (error) {
+      console.error('Logout error:', error);
+      set.status = 500;
+      return {
+        success: false,
+        message: '로그아웃 중 오류가 발생했습니다.'
+      };
+    }
+  }, {
+    body: t.Object({
+      refreshToken: t.String()
+    })
   }); 

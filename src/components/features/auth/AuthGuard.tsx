@@ -14,7 +14,6 @@ export function AuthGuard({ children, fallback }: AuthGuardProps) {
   const router = useRouter();
 
   useEffect(() => {
-    console.log("AuthGuard")
     if (!isLoading && !isLoggedIn) {
       router.push('/admin/login');
     }
